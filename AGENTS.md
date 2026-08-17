@@ -96,7 +96,6 @@ Output is deterministic, and CI enforces that committed generated files match
 ├── ssh/                     # SSH client implementation
 ├── sync/                    # Cloud → local graph sync
 ├── web/                     # Web-based resource viewer
-├── smoke_tests/             # Shell-based integration tests (require AWS credentials)
 ├── .github/workflows/ci.yml # GitHub Actions CI
 └── .githooks/pre-commit     # gofmt + golangci-lint pre-commit hook
 ```
@@ -485,8 +484,6 @@ Two test details that are easy to lose:
   placeholders must stay grammar-parseable (`*****` is in the `UnquotedParam` class).
 - **`template/env` exports were renamed** from `ALL_CAPS` (`env.FILLERS` is now
   `env.Fillers`).
-- **`wallix/awless-templates` references in `commands/run.go`** point at a *different*
-  upstream repo and must stay.
 - **Template PEG regeneration** is `make generate-parser`, which installs the pinned `peg`
   version. Edit the `.peg` file, never the `.peg.go`. The version is pinned (`PEG_VERSION` in
   the Makefile) because the previously committed parser was produced by an unrecorded one:

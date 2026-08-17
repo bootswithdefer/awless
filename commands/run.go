@@ -82,7 +82,7 @@ const maxMsgLen = 140
 var runCmd = &cobra.Command{
 	Use:                "run PATH",
 	Short:              "Run a template given a filepath or URL",
-	Example:            "  awless run ~/templates/my-infra.aws\n  awless run https://raw.githubusercontent.com/wallix/awless-templates/master/create_vpc.aws\n  awless run repo:create_vpc",
+	Example:            "  awless run ~/templates/my-infra.aws\n  awless run https://raw.githubusercontent.com/bootswithdefer/awless-templates/master/create_vpc.aws\n  awless run repo:create_vpc",
 	PersistentPreRunE:  applyHooks(initLoggerHook, initAwlessEnvHook, initCloudServicesHook, initSyncerHook, firstInstallDoneHook),
 	PersistentPostRunE: applyHooks(verifyNewVersionHook, onVersionUpgrade, networkMonitorHook),
 
@@ -486,7 +486,7 @@ func oneLinerShortDesc(action string, entities []string) string {
 }
 
 const (
-	defaultRepoPrefix = "https://raw.githubusercontent.com/wallix/awless-templates/master"
+	defaultRepoPrefix = "https://raw.githubusercontent.com/bootswithdefer/awless-templates/master"
 	fileExt           = ".aws"
 )
 
