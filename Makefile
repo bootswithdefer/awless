@@ -82,7 +82,7 @@ lint-config: $(GOLANGCI) ## Validate .golangci.yml against its schema
 
 .PHONY: vuln
 vuln: $(GOVULNCHECK) ## Check for known vulnerabilities reachable from this code
-	$(GOVULNCHECK) ./...
+	GOTOOLCHAIN=$(shell sed -n 's/^toolchain //p' go.mod) $(GOVULNCHECK) ./...
 
 ## --- formatting ----------------------------------------------------------
 

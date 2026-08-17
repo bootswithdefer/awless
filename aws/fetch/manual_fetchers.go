@@ -15,6 +15,8 @@ import (
 	codedeploytypes "github.com/aws/aws-sdk-go-v2/service/codedeploy/types"
 	"github.com/aws/aws-sdk-go-v2/service/configservice"
 	configservicetypes "github.com/aws/aws-sdk-go-v2/service/configservice/types"
+	"github.com/aws/aws-sdk-go-v2/service/directconnect"
+	directconnecttypes "github.com/aws/aws-sdk-go-v2/service/directconnect/types"
 	"github.com/aws/aws-sdk-go-v2/service/elasticbeanstalk"
 	elasticbeanstalktypes "github.com/aws/aws-sdk-go-v2/service/elasticbeanstalk/types"
 	"github.com/aws/aws-sdk-go-v2/service/eventbridge"
@@ -23,6 +25,8 @@ import (
 	globalacceleratortypes "github.com/aws/aws-sdk-go-v2/service/globalaccelerator/types"
 	"github.com/aws/aws-sdk-go-v2/service/glue"
 	gluetypes "github.com/aws/aws-sdk-go-v2/service/glue/types"
+	"github.com/aws/aws-sdk-go-v2/service/networkmanager"
+	networkmanagertypes "github.com/aws/aws-sdk-go-v2/service/networkmanager/types"
 	"github.com/aws/aws-sdk-go-v2/service/sesv2"
 	"github.com/aws/aws-sdk-go-v2/service/wafv2"
 	wafv2types "github.com/aws/aws-sdk-go-v2/service/wafv2/types"
@@ -1715,7 +1719,329 @@ func addManualBackupFetchFuncs(conf *Config, funcs map[string]fetch.Func) {
 }
 
 func addManualDirectconnectFetchFuncs(conf *Config, funcs map[string]fetch.Func) {
+	funcs["directconnectconnection"] = func(ctx context.Context, cache fetch.Cache) ([]*graph.Resource, any, error) {
+		var resources []*graph.Resource
+		var objects []directconnecttypes.Connection
+
+		if !conf.getBoolDefaultTrue("aws.directconnect.directconnectconnection.sync") && !getBoolFromContext(ctx, "force") {
+			conf.Log.Verbose("sync: *disabled* for resource directconnect[directconnectconnection]")
+			return resources, objects, nil
+		}
+
+		var nextToken *string
+		for {
+			out, err := conf.APIs.Directconnect.DescribeConnections(ctx, &directconnect.DescribeConnectionsInput{NextToken: nextToken})
+			if err != nil {
+				return resources, objects, err
+			}
+			for _, conn := range out.Connections {
+				objects = append(objects, conn)
+				res, err := awsconv.NewResource(conn)
+				if err != nil {
+					return resources, objects, err
+				}
+				resources = append(resources, res)
+			}
+			if out.NextToken == nil {
+				break
+			}
+			nextToken = out.NextToken
+		}
+
+		return resources, objects, nil
+	}
+
+	funcs["directconnectvirtualinterface"] = func(ctx context.Context, cache fetch.Cache) ([]*graph.Resource, any, error) {
+		var resources []*graph.Resource
+		var objects []directconnecttypes.VirtualInterface
+
+		if !conf.getBoolDefaultTrue("aws.directconnect.directconnectvirtualinterface.sync") && !getBoolFromContext(ctx, "force") {
+			conf.Log.Verbose("sync: *disabled* for resource directconnect[directconnectvirtualinterface]")
+			return resources, objects, nil
+		}
+
+		var nextToken *string
+		for {
+			out, err := conf.APIs.Directconnect.DescribeVirtualInterfaces(ctx, &directconnect.DescribeVirtualInterfacesInput{NextToken: nextToken})
+			if err != nil {
+				return resources, objects, err
+			}
+			for _, vif := range out.VirtualInterfaces {
+				objects = append(objects, vif)
+				res, err := awsconv.NewResource(vif)
+				if err != nil {
+					return resources, objects, err
+				}
+				resources = append(resources, res)
+			}
+			if out.NextToken == nil {
+				break
+			}
+			nextToken = out.NextToken
+		}
+
+		return resources, objects, nil
+	}
+
+	funcs["directconnectlag"] = func(ctx context.Context, cache fetch.Cache) ([]*graph.Resource, any, error) {
+		var resources []*graph.Resource
+		var objects []directconnecttypes.Lag
+
+		if !conf.getBoolDefaultTrue("aws.directconnect.directconnectlag.sync") && !getBoolFromContext(ctx, "force") {
+			conf.Log.Verbose("sync: *disabled* for resource directconnect[directconnectlag]")
+			return resources, objects, nil
+		}
+
+		var nextToken *string
+		for {
+			out, err := conf.APIs.Directconnect.DescribeLags(ctx, &directconnect.DescribeLagsInput{NextToken: nextToken})
+			if err != nil {
+				return resources, objects, err
+			}
+			for _, lag := range out.Lags {
+				objects = append(objects, lag)
+				res, err := awsconv.NewResource(lag)
+				if err != nil {
+					return resources, objects, err
+				}
+				resources = append(resources, res)
+			}
+			if out.NextToken == nil {
+				break
+			}
+			nextToken = out.NextToken
+		}
+
+		return resources, objects, nil
+	}
+
+	funcs["directconnectgateway"] = func(ctx context.Context, cache fetch.Cache) ([]*graph.Resource, any, error) {
+		var resources []*graph.Resource
+		var objects []directconnecttypes.DirectConnectGateway
+
+		if !conf.getBoolDefaultTrue("aws.directconnect.directconnectgateway.sync") && !getBoolFromContext(ctx, "force") {
+			conf.Log.Verbose("sync: *disabled* for resource directconnect[directconnectgateway]")
+			return resources, objects, nil
+		}
+
+		var nextToken *string
+		for {
+			out, err := conf.APIs.Directconnect.DescribeDirectConnectGateways(ctx, &directconnect.DescribeDirectConnectGatewaysInput{NextToken: nextToken})
+			if err != nil {
+				return resources, objects, err
+			}
+			for _, gw := range out.DirectConnectGateways {
+				objects = append(objects, gw)
+				res, err := awsconv.NewResource(gw)
+				if err != nil {
+					return resources, objects, err
+				}
+				resources = append(resources, res)
+			}
+			if out.NextToken == nil {
+				break
+			}
+			nextToken = out.NextToken
+		}
+
+		return resources, objects, nil
+	}
+
+	funcs["directconnectgatewayassociation"] = func(ctx context.Context, cache fetch.Cache) ([]*graph.Resource, any, error) {
+		var resources []*graph.Resource
+		var objects []directconnecttypes.DirectConnectGatewayAssociation
+
+		if !conf.getBoolDefaultTrue("aws.directconnect.directconnectgatewayassociation.sync") && !getBoolFromContext(ctx, "force") {
+			conf.Log.Verbose("sync: *disabled* for resource directconnect[directconnectgatewayassociation]")
+			return resources, objects, nil
+		}
+
+		var nextToken *string
+		for {
+			out, err := conf.APIs.Directconnect.DescribeDirectConnectGatewayAssociations(ctx, &directconnect.DescribeDirectConnectGatewayAssociationsInput{NextToken: nextToken})
+			if err != nil {
+				return resources, objects, err
+			}
+			for _, assoc := range out.DirectConnectGatewayAssociations {
+				objects = append(objects, assoc)
+				res, err := awsconv.NewResource(assoc)
+				if err != nil {
+					return resources, objects, err
+				}
+				resources = append(resources, res)
+			}
+			if out.NextToken == nil {
+				break
+			}
+			nextToken = out.NextToken
+		}
+
+		return resources, objects, nil
+	}
 }
 
 func addManualNetworkmanagerFetchFuncs(conf *Config, funcs map[string]fetch.Func) {
+	// Helper to collect all global network IDs (needed by all four resources below).
+	getGlobalNetworkIDs := func(ctx context.Context) ([]string, error) {
+		var ids []string
+		pager := networkmanager.NewDescribeGlobalNetworksPaginator(conf.APIs.Networkmanager, &networkmanager.DescribeGlobalNetworksInput{})
+		for pager.HasMorePages() {
+			out, err := pager.NextPage(ctx)
+			if err != nil {
+				return nil, err
+			}
+			for _, gn := range out.GlobalNetworks {
+				ids = append(ids, awssdk.ToString(gn.GlobalNetworkId))
+			}
+		}
+		return ids, nil
+	}
+
+	funcs["networkmanagersite"] = func(ctx context.Context, cache fetch.Cache) ([]*graph.Resource, any, error) {
+		var resources []*graph.Resource
+		var objects []networkmanagertypes.Site
+
+		if !conf.getBoolDefaultTrue("aws.networkmanager.networkmanagersite.sync") && !getBoolFromContext(ctx, "force") {
+			conf.Log.Verbose("sync: *disabled* for resource networkmanager[networkmanagersite]")
+			return resources, objects, nil
+		}
+
+		gnIDs, err := getGlobalNetworkIDs(ctx)
+		if err != nil {
+			return resources, objects, err
+		}
+
+		for _, gnID := range gnIDs {
+			pager := networkmanager.NewGetSitesPaginator(conf.APIs.Networkmanager, &networkmanager.GetSitesInput{GlobalNetworkId: awssdk.String(gnID)})
+			for pager.HasMorePages() {
+				out, err := pager.NextPage(ctx)
+				if err != nil {
+					return resources, objects, err
+				}
+				for _, site := range out.Sites {
+					objects = append(objects, site)
+					res, err := awsconv.NewResource(site)
+					if err != nil {
+						return resources, objects, err
+					}
+					parent := graph.InitResource(cloud.GlobalNetwork, gnID)
+					res.AddRelation(rdf.ChildrenOfRel, parent)
+					resources = append(resources, res)
+				}
+			}
+		}
+
+		return resources, objects, nil
+	}
+
+	funcs["networkmanagerlink"] = func(ctx context.Context, cache fetch.Cache) ([]*graph.Resource, any, error) {
+		var resources []*graph.Resource
+		var objects []networkmanagertypes.Link
+
+		if !conf.getBoolDefaultTrue("aws.networkmanager.networkmanagerlink.sync") && !getBoolFromContext(ctx, "force") {
+			conf.Log.Verbose("sync: *disabled* for resource networkmanager[networkmanagerlink]")
+			return resources, objects, nil
+		}
+
+		gnIDs, err := getGlobalNetworkIDs(ctx)
+		if err != nil {
+			return resources, objects, err
+		}
+
+		for _, gnID := range gnIDs {
+			pager := networkmanager.NewGetLinksPaginator(conf.APIs.Networkmanager, &networkmanager.GetLinksInput{GlobalNetworkId: awssdk.String(gnID)})
+			for pager.HasMorePages() {
+				out, err := pager.NextPage(ctx)
+				if err != nil {
+					return resources, objects, err
+				}
+				for _, link := range out.Links {
+					objects = append(objects, link)
+					res, err := awsconv.NewResource(link)
+					if err != nil {
+						return resources, objects, err
+					}
+					parent := graph.InitResource(cloud.GlobalNetwork, gnID)
+					res.AddRelation(rdf.ChildrenOfRel, parent)
+					resources = append(resources, res)
+				}
+			}
+		}
+
+		return resources, objects, nil
+	}
+
+	funcs["networkmanagerdevice"] = func(ctx context.Context, cache fetch.Cache) ([]*graph.Resource, any, error) {
+		var resources []*graph.Resource
+		var objects []networkmanagertypes.Device
+
+		if !conf.getBoolDefaultTrue("aws.networkmanager.networkmanagerdevice.sync") && !getBoolFromContext(ctx, "force") {
+			conf.Log.Verbose("sync: *disabled* for resource networkmanager[networkmanagerdevice]")
+			return resources, objects, nil
+		}
+
+		gnIDs, err := getGlobalNetworkIDs(ctx)
+		if err != nil {
+			return resources, objects, err
+		}
+
+		for _, gnID := range gnIDs {
+			pager := networkmanager.NewGetDevicesPaginator(conf.APIs.Networkmanager, &networkmanager.GetDevicesInput{GlobalNetworkId: awssdk.String(gnID)})
+			for pager.HasMorePages() {
+				out, err := pager.NextPage(ctx)
+				if err != nil {
+					return resources, objects, err
+				}
+				for _, device := range out.Devices {
+					objects = append(objects, device)
+					res, err := awsconv.NewResource(device)
+					if err != nil {
+						return resources, objects, err
+					}
+					parent := graph.InitResource(cloud.GlobalNetwork, gnID)
+					res.AddRelation(rdf.ChildrenOfRel, parent)
+					resources = append(resources, res)
+				}
+			}
+		}
+
+		return resources, objects, nil
+	}
+
+	funcs["networkmanagerconnection"] = func(ctx context.Context, cache fetch.Cache) ([]*graph.Resource, any, error) {
+		var resources []*graph.Resource
+		var objects []networkmanagertypes.Connection
+
+		if !conf.getBoolDefaultTrue("aws.networkmanager.networkmanagerconnection.sync") && !getBoolFromContext(ctx, "force") {
+			conf.Log.Verbose("sync: *disabled* for resource networkmanager[networkmanagerconnection]")
+			return resources, objects, nil
+		}
+
+		gnIDs, err := getGlobalNetworkIDs(ctx)
+		if err != nil {
+			return resources, objects, err
+		}
+
+		for _, gnID := range gnIDs {
+			pager := networkmanager.NewGetConnectionsPaginator(conf.APIs.Networkmanager, &networkmanager.GetConnectionsInput{GlobalNetworkId: awssdk.String(gnID)})
+			for pager.HasMorePages() {
+				out, err := pager.NextPage(ctx)
+				if err != nil {
+					return resources, objects, err
+				}
+				for _, conn := range out.Connections {
+					objects = append(objects, conn)
+					res, err := awsconv.NewResource(conn)
+					if err != nil {
+						return resources, objects, err
+					}
+					parent := graph.InitResource(cloud.GlobalNetwork, gnID)
+					res.AddRelation(rdf.ChildrenOfRel, parent)
+					resources = append(resources, res)
+				}
+			}
+		}
+
+		return resources, objects, nil
+	}
 }
