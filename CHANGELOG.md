@@ -1,3 +1,26 @@
+## v1.4.1
+
+### Fixed
+
+- **Direct Connect fetchers were missing.** All five resource types (connections, virtual
+  interfaces, LAGs, gateways, gateway associations) were defined but never implemented,
+  causing `list directconnectgateways` and siblings to fail with "no fetch func defined".
+  Implemented with continuation-token loops (the SDK still publishes no paginators).
+
+- **Network Manager child resource fetchers were missing.** Sites, links, devices, and
+  connections were defined but the manual fetcher stub was empty. Implemented with SDK
+  paginators fanning out per global network.
+
+- **7 stdlib vulnerabilities** (GO-2026-5026, GO-2026-5972, GO-2026-6088, GO-2026-6089,
+  GO-2026-6090, GO-2026-6091, GO-2026-6218) fixed by bumping the toolchain to go1.26.6.
+
+### Changed
+
+- `make vuln` now sets `GOTOOLCHAIN` from the `go.mod` toolchain directive so it catches
+  the same stdlib vulnerabilities locally that CI catches.
+
+- Full Go module update (`go get -u ./...`).
+
 ## v1.4.0
 
 ### Added
