@@ -13,7 +13,7 @@
 
 `awless` is a powerful, innovative and small surface command line interface (CLI) to manage Amazon Web Services.
 
-> **This is a modernized fork of [wallix/awless](https://github.com/wallix/awless)**, which was last released in 2018. It migrates to AWS SDK v2, replaces `dep`/vendor with Go modules, adds 8 AWS services, and fixes a number of bugs that the SDK migration left behind. See [Changes in this fork](#changes-in-this-fork).
+> **This is a modernized fork of [wallix/awless](https://github.com/wallix/awless)** (via [babyhuey/awless](https://github.com/babyhuey/awless)), which was last released in 2018. It migrates to AWS SDK v2, replaces `dep`/vendor with Go modules, adds multiple new AWS services, and fixes a number of bugs that the SDK migration left behind. See [Changes in this fork](#changes-in-this-fork).
 
 [Upstream Wiki](https://github.com/wallix/awless/wiki) | [Changelog](./CHANGELOG.md)
 
@@ -278,9 +278,12 @@ Take the tour at [Getting Started (wiki)](https://github.com/wallix/awless/wiki/
 
 ### New services
 
-EKS, DynamoDB, Secrets Manager, KMS, API Gateway v2, SSM, EFS, CloudTrail, CloudWatch
-Logs, Direct Connect, and Network Manager (Cloud WAN). All are writable, not list-only:
-43 create/update/delete commands were added across them.
+36 AWS services added, all writable rather than list-only. EKS, DynamoDB, Secrets
+Manager, KMS, API Gateway v2, SSM, EFS, CloudTrail, CloudWatch Logs, ElastiCache,
+EventBridge, Step Functions, WAF v2, AWS Config, Kinesis, Redshift, CodePipeline,
+CodeBuild, Elastic Beanstalk, Transit Gateway, CodeDeploy, Glue, SES v2, Cognito,
+MSK, Amazon MQ, FSx, Global Accelerator, VPC Peering, Cloud Map, AWS Backup, VPC
+Endpoints, Direct Connect, and Network Manager (Cloud WAN).
 
 ### Bugs fixed
 
@@ -375,13 +378,10 @@ Terraform is much broader in scope. `awless` takes a different approach:
 
 **Is this fork maintained?**
 
-It is modernized rather than actively developed. CI is green, every command has an
-acceptance test, and releases are published for Linux, macOS and Windows — install with
-Homebrew or grab a binary from [Releases](https://github.com/bootswithdefer/awless/releases).
-
-There is no open backlog. Decisions that look like gaps but are deliberate — `gosec` not
-being a build gate, Classic ELB support being retained, five functions left untested — are
-recorded under [Deliberate Omissions](./AGENTS.md#deliberate-omissions) in `AGENTS.md`.
+Yes. CI is green, every command has an acceptance test, and releases are published for
+Linux, macOS and Windows — install with Homebrew or grab a binary from
+[Releases](https://github.com/bootswithdefer/awless/releases). Bug reports and
+contributions are welcome.
 
 # About
 

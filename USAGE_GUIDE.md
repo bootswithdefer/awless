@@ -35,7 +35,7 @@ A comprehensive guide to all awless commands and supported resources.
 
 ```bash
 # Build from source
-git clone https://github.com/babyhuey/awless.git
+git clone https://github.com/bootswithdefer/awless.git
 cd awless && go build -o awless .
 
 # Your ~/.aws/credentials and ~/.aws/config are used automatically

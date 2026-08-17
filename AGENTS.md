@@ -4,7 +4,7 @@ Guide for AI agents working in this repository.
 
 ## Project Overview
 
-`awless` is a CLI tool for managing AWS resources. It provides a template DSL for infrastructure creation/revert, local graph-based resource sync, smart SSH, and human-friendly output. This is a modernized fork of [wallix/awless](https://github.com/wallix/awless) maintained at [bootswithdefer/awless](https://github.com/bootswithdefer/awless).
+`awless` is a CLI tool for managing AWS resources. It provides a template DSL for infrastructure creation/revert, local graph-based resource sync, smart SSH, and human-friendly output. This is a modernized fork of [wallix/awless](https://github.com/wallix/awless) (via [babyhuey/awless](https://github.com/babyhuey/awless)) maintained at [bootswithdefer/awless](https://github.com/bootswithdefer/awless).
 
 - **Language:** Go 1.26 (`go 1.26.1` with `toolchain go1.26.5` in `go.mod`)
 - **Module path:** `github.com/bootswithdefer/awless`

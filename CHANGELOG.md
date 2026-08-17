@@ -272,9 +272,9 @@ First release of this fork. Everything below is relative to upstream
 
 ### Added
 
-- **Eight AWS services, all writable rather than list-only.** EKS, DynamoDB, Secrets
+- **Eight new AWS services, all writable rather than list-only.** EKS, DynamoDB, Secrets
   Manager, KMS, API Gateway v2, SSM, EFS, CloudTrail and CloudWatch Logs, adding 27
-  create/update/delete commands. `awless` now ships 194 CRUD one-liners.
+  create/update/delete commands.
 - **`awless create secret` / `create ssmparameter`** and the rest of the new commands each
   carry `-h` documentation, worked examples and enumerated valid values.
 - Every command now has a documented CLI example; `awless <action> <entity> -h` shows one.
